@@ -29,6 +29,12 @@ def main(page: ft.Page):
         atualizar_cores()
 
     # Campos
+    nome = ft.TextField(
+        label="Nome",
+        width=300,
+        prefix_icon=ft.Icons.PERSON,
+        border_color="#6a1b9a"
+    )
     peso = ft.TextField(
         label="Peso (kg)",
         width=300,
@@ -51,11 +57,42 @@ def main(page: ft.Page):
         color=texto_cor,
     )
 
+    # Conatainer para os cards de resultado
+    cards_container = ft.Column(
+        width=350,
+        scroll=ft.ScrollMode.AUTO,
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+    )
+
+    # Função para criar e adicionar um card de resultado
+    def criar_card_resultado(nome_valor, peso_valor, altura_valor, imc_valor, classificacao_valor):
+        novo_card = ft.Card(
+            elevation=4,
+            content=ft.Container(
+                content=ft.Column(
+                    [
+                       ft.Text(nome_valor, size=18, weight=ft.FontWeight.BOLD, color="#6a1b9a"),
+                       ft.Text(f"Peso: {peso_valor} kg", size=14),
+                       ft.Text(f"Altura: {altura_valor} m", size=14),
+                       ft.Text(f"IMC: {imc_valor:.2f}", size=16, weight=ft.FontWeight.BOLD),
+                       ft.Text(f"Classificação: {classificacao_valor}", size=16, color=ft.Colors.RED_900 if 'Obesidade' in classificacao_valor else ft.Colors.GREEN_800)  
+                    ]
+                ),
+                padding=20,
+            ),
+            width=300,
+            margin=ft.margin.symmetric(vertical=10),
+        )
+        cards_container.controls.append(novo_card)
+        page.update()
+
     # Calcular IMC
     def calcular_imc(e):
         try:
             p = float(peso.value.replace(",", "."))
             a = float(altura.value.replace(",", "."))
+            n = nome.value.strip()
             if p <= 0 or a <= 0:
                 resultado.value = "⚠️ Informe valores válidos!"
             else:
@@ -72,8 +109,11 @@ def main(page: ft.Page):
                     classificacao = "Obesidade grau II"
                 else:
                     classificacao = "Obesidade grau III"
-
-                resultado.value = f"📊 Seu IMC é {imc:.2f} → {classificacao}"
+                
+                # Cria e adiciona o card de resultado
+                criar_card_resultado(n, p, a, imc, classificacao)
+                # Exibe o resultado temporariamente no campo de texto
+                resultado.value = f"📊 IMC calculado e salva"
         except:
             resultado.value = "⚠️ Preencha peso e altura corretamente!"
         page.update()
@@ -145,6 +185,7 @@ def main(page: ft.Page):
                 ft.Image(src="Senai.png", width=150, height=80),
                 ft.Row([titulo, tema_btn], alignment=ft.MainAxisAlignment.CENTER),
                 subtitulo,
+                nome,
                 peso,
                 altura,
                 ft.Row(
@@ -153,6 +194,11 @@ def main(page: ft.Page):
                     spacing=20,
                 ),
                 resultado,
+                resultado,
+                ft.Divider(height=10, color="transparent"),
+                ft.Text("Resultados Salvos", size=16, weight=ft.FontWeight.BOLD, color=texto_cor),
+                ft.Divider(height=2, color="#6a1b9a"),
+                cards_container,
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -160,4 +206,4 @@ def main(page: ft.Page):
         )
     )
 
-ft.app(main)
+ft.app(target=main)
