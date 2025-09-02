@@ -24,7 +24,7 @@ A interface do aplicativo possui:
 - Área para mostrar os **resultados salvos**
 
 <img src="https://github.com/user-attachments/assets/6c0bdd39-c55a-4400-86fd-2393ed073719" alt="pg_principal" width="400" />
-<img width="415" alt="pg_resultado" src="https://github.com/user-attachments/assets/c28f92b2-fd92-4418-a3b2-2991007bdf61" />
+<img width="412" alt="pg_resultado" src="https://github.com/user-attachments/assets/c28f92b2-fd92-4418-a3b2-2991007bdf61" />
 
 
 ---
